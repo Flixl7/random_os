@@ -12,6 +12,8 @@ ZEROES_ASM = zeroes.asm
 BOOT_BIN = $(BUILD_DIR)/boot.bin
 KERNEL_ENTRY_O = $(BUILD_DIR)/kernel_entry.o
 KERNEL_O = $(BUILD_DIR)/kernel.o
+PRINT_CHAR_O = $(BUILD_DIR)/print_char.o
+SHELL_O = $(BUILD_DIR)/simple_shell.o
 ZEROES_BIN = $(BUILD_DIR)/zeroes.bin
 FULL_KERNEL_BIN = $(BUILD_DIR)/full_kernel.bin
 OS_BIN = $(BUILD_DIR)/OS.bin
@@ -31,10 +33,16 @@ $(KERNEL_ENTRY_O): $(KERNEL_ENTRY_ASM)
 $(KERNEL_O): $(KERNEL_C)
 	$(CC) -ffreestanding -m32 -g -c $< -o $@
 
+$(PRINT_CHAR_O): print_char.c print_char.h
+	$(CC) -ffreestanding -m32 -g -c $< -o $@
+
+$(SHELL_O): simple_shell.c
+	$(CC) -ffreestanding -m32 -g -c $< -o $@
+
 $(ZEROES_BIN): $(ZEROES_ASM)
 	$(NASM) $< -f bin -o $@
 
-$(FULL_KERNEL_BIN): $(KERNEL_ENTRY_O) $(KERNEL_O)
+$(FULL_KERNEL_BIN): $(KERNEL_ENTRY_O) $(KERNEL_O) $(SHELL_O) $(PRINT_CHAR_O)
 	$(LD) -o $@ -Ttext 0x1000 $^ --oformat binary
 
 $(OS_BIN): $(BOOT_BIN) $(FULL_KERNEL_BIN) $(ZEROES_BIN)

@@ -1,5 +1,7 @@
-typedef unsigned char uint8_t;
-typedef unsigned short uint16_t;
+#include "types.h"
+#include "print_char.h"
+
+extern void shell_loop(void);
 
 static inline uint8_t inb(uint16_t port) {
     uint8_t ret;
@@ -30,7 +32,7 @@ char scancode_to_ascii(uint8_t sc) {
     return 0;
 }
 
-void print_char(char c) {
+/*void print_char(char c) {
     static int pos = 0;
     volatile char* video_memory = (volatile char*)0xb8000;
 
@@ -45,15 +47,16 @@ void print_char(char c) {
         video_memory[pos * 2 + 1] = 0x07;
         pos++;
     }
-}
+}*/
 
 void main(){
-    while (1) {
+    shell_loop();
+    /*while (1) {
         uint8_t sc = get_scancode();
         char c = scancode_to_ascii(sc);
         if (c) {
             print_char(c);
         }
-    }
+    }*/
     return;
 }
