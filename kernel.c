@@ -37,8 +37,8 @@ void print_char(char c) {
     if (c == '\b') {
         if (pos > 0) {
             pos--;
-            video_memory[pos * 2] = ' ';       // erase character
-            video_memory[pos * 2 + 1] = 0x07;  // attribute
+            video_memory[pos * 2] = ' ';
+            video_memory[pos * 2 + 1] = 0x07;
         }
     } else {
         video_memory[pos * 2] = c;
